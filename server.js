@@ -66,3 +66,27 @@ app.get('/req-recipe', async function (request, response) {
         })
     }
 })
+
+app.delete('/delete-recipe/:id', async function(request, response) {
+    try {
+        const expenseEntry = await Recipe.findById(request.params.id)
+        if(expenseEntry) {
+            await Recipe.findByIdAndDelete(request.params.id)
+            response.status(200).json({
+                "status" : "success",
+                "message" : "entry deleted"
+            })
+        } else {
+            response.status(404).json({
+                "status" : "failure",
+                "message" : "entry not found"
+            })
+        }
+    } catch(error) {
+        response.status(500).json({
+            "status" : "failure",
+            "message" : "could not delete entry",
+            "error" : error
+        })
+    }
+  })
